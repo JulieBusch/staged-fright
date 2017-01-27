@@ -20,4 +20,4 @@ startDB()
   .then(() => server.on('request', myServer))
   .then(() => ioInit(server))
   .catch(err => console.error(err))
-  .finally(() => server.listen(_Port, () => console.log(chalk.magenta(`Meme magic has begun on Port ${_Port}`))));
+  .finally(() => server.listen(_Port, () => console.log(chalk.magenta(`staged-fright has begun on port ${_Port}`))));

@@ -1,10 +1,44 @@
-##Staged Fright
+*****************
+* Staged Fright *
+*****************
+
 
 This builds off of Eliot's React/Aframe boilerplate, Meme Magic.
 
-  Set up:
+MVP: GOAL
+---------
 
-    1. $ createdb staged-fright (just for the first time, obvs)
+Create a basic setup for public speaking in VR
+
+1) Render an equirectangular image of a conference room or arena, at minimum
+2) Better yet, play a 360 video of a crowd
+3) Display a speach text before the speaker's eyes
+4) Achieve reasonable rendering in both Chrome browser and using the Samsung Gear headset
+
+
+MVP: WORKING PARTS
+------------------
+
+1) The current code plays the video in a loop using the video-sphere element of a-frame.
+2) Text is displayed - statically - overlaying the video. The speech text is not collected from the user, but read from a flat-file.
+
+
+MVP: STEPS FORWARD
+------------------
+
+1) The text display properties still need to be adjusted for better user experience when using the headset.
+2) Resolve text scrolling and/or shading
+  a) investigate and build POC for the experimental build of a-frame that supports text rendering
+  b) build POC for representing speech text as an array of lines and replacing them as result of state change in redux
+3) Build an entry point panel for the application where the user enters their speach combined with some metrics for its delivery.
+
+
+
+
+MVP: BUILD and EXECUTION
+------------------------
+
+    1. $ createdb staged-fright (just for the first time)
 
     2. Make a `secrets.js` file in the root directory.
       (Also just to start; the secrets file is already in the .gitignore)
@@ -17,48 +51,6 @@ This builds off of Eliot's React/Aframe boilerplate, Meme Magic.
 
 
     3. $ npm install
-    4. $ npm start (watch for db force sync option in terminal)
-    5. go to localhost:3001
+    4. $ npm start 
+    5. go to localhost:3001 in Chrome browser
 
-
-
-
-
-## Meme Magic
-
-It's a terrible name, I know. Doesn't summarize this app at all. Here it is:
-Meme Magic is a heavy handed backend boiler plate with some very light front end stuff set up. What little is set up on the front end is beautiful (PropTypes, Immutable.js for Redux Store, ES6, AFrame and its cleaner Reactified Counterpart), and the backend is fully set except your choice of login system at the moment.
-
-## Motivation
-
-I built this to be a performant, easy to deploy, ES6 God, and most importantly - sketchy boiler plate for my students at Fullstack Academy to get a good glimpse of boiler plate work and the foundation for a good app.
-
-## Installation
-
-This codebase has two criteria:
-
-A:
-
-  I am sadly a WSL user (Yes, Windows, Subsystem, (for) Linux), so I can't run post-install pg-init scripts. So step 1 is make a new psql database named `meme-magic`. Thats it.
-
-B:
-
-  Make a `secrets.js` file in the root directory. It should contain:
-
-  `export default {
-    SessionKey: 'WhateverYouWant'
-  };`
-
-That's it. Enjoy.
-
-## Tests
-
-Tests are my current step in this project - 12/14/16
-
-## Authentication
-
-Auth is ready to go, but Im unsure if I want to offer uniform auth...
-
-## License
-
-Apache 2.0
