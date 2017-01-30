@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import store from '../redux/store';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
-import { AppContainer } from './containers';
+import { AppContainer, NewSpeechContainer } from './containers';
 import SplashScreen from './components/SplashScreen';
 import 'aframe';
 import 'aframe-bmfont-text-component';
@@ -25,6 +25,7 @@ ReactDOM.render(
     <MuiThemeProvider>
       <Router history={browserHistory}>
         <Route path='/' component={SplashScreen} />
+        <Route path='/new-speech' component={NewSpeechContainer} />
         <Route path='/practice' component={AppContainer} />
       </Router>
     </MuiThemeProvider>
