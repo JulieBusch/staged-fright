@@ -15,7 +15,53 @@ export default class VRViewer extends Component {
 
   componentDidMount () {
     // this.props.scrollLines(this.props.wpm, this.props.speechLines.length)
-    this.tick(window.performance.now())
+    this.tick(window.performance.now());
+
+    if (window.MediaRecorder == undefined) {
+      alert('MediaRecorder not supported, boo');
+      } else {
+        let contentTypes = ["video/webm",
+                            "video/webm;codecs=vp8",
+                            "video/x-matroska;codecs=avc1",
+                            "audio/webm",
+                            "video/mp4;codecs=avc1",
+                            "video/invalid"];
+        let text = '';
+        contentTypes.forEach(contentType => {
+          text += contentType + ' is ' + (MediaRecorder.isTypeSupported(contentType) ?
+              'supported\n' : 'NOT supported \n');
+        });
+        console.log(text);
+        console.log(MediaRecorder);
+      }
+
+    const constraints = { "audio" : true };
+    let theStream;
+    let theRecorder;
+    let recorder;
+    let recordedChunks = [];
+
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then((stream)=>{
+        console.log(stream);
+          try {
+            recorder = new MediaRecorder(stream, {mimeType : "video/webm"});
+            console.log(recorder);
+          } catch (e) {
+            console.error('Exception while creating MediaRecorder: ' + e);
+            return;
+          }
+
+          theRecorder = recorder;
+          recorder.ondataavailable = (event) => { 
+            console.log('Got DATA: ', event.data);
+            recordedChunks.push(event.target.data); };
+          recorder.start(100);
+
+      })
+      .catch(e => { console.error('getUserMedia() failed: ' + e); });
+
+      console.log(recordedChunks);
   }
 
   tick = time => {

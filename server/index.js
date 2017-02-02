@@ -5,6 +5,7 @@ import express from 'express';
 const app = express();
 import _db from './db/db';
 import chalk from 'chalk';
+import path from 'path';
 
 import configServer from './configure';
 import configSessions from './sessions';
@@ -15,6 +16,11 @@ configSessions(app);
 import Routes from './routes';
 
 app.use('/api', Routes);
+
+app.get('/recorder', (req, res) => {
+	console.log('Hitting the new route......');
+	res.sendFile(path.join(__dirname, '../audio-recorder/AudioRecorder/index.html'));
+});
 
 app.get('/*', (req, res) => {
   if (req.session.socketData) {
