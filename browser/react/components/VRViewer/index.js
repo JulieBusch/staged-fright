@@ -11,13 +11,16 @@ export default class VRViewer extends Component {
     super(props);
     // console.log("PROPS", props);
     this.state = {
-      at: 0, 
+      scrollOffset: 0, 
       time: window.performance.now(),
       loading: true,
       loudness: 0,
     }
     this.startRecording = this.startRecording.bind(this);
     // this.streamToStore = this.streamToStore.bind(this);
+    this.speechLines = props.speechLines.map((line, idx) => ({
+      line, idx, position: [0.28, idx, -0.26]
+      }))
   }
 
   startRecording() {
@@ -91,25 +94,33 @@ export default class VRViewer extends Component {
     setTimeout(() => this.setState({ loading: false }), 1500); 
     this.tick(window.performance.now());
     setTimeout(this.startRecording, 4000)
-    setTimeout(this.props.showSummary, 8000)
+    // setTimeout(this.props.showSummary, 8000)
   }
 
   componentWillUnmount () {
     cancelAnimationFrame(this.pollRafId);
     cancelAnimationFrame(this.tickRafId)
     this.stream && this.stream.getAudioTracks().forEach(track => track.stop())
+    soundMeter.stop();
+  }
+
+  componentWillReceiveProps () {
+    //update speechLines prop  
   }
 
   tick = time => {
     const dt = time - this.state.time
-    const at = this.state.at + 0.0005 * dt
-    this.setState({ time, at })
+    //wpm modifies coefficient multiplying scrollOffset + dt
+    const scrollOffset = this.state.scrollOffset + 0.0005 * dt
+    this.setState({ time, scrollOffset })
     this.tickRafId = requestAnimationFrame(this.tick)
   }
+  //make it so scrollOffset is directly comparable to idx and lines 
+  //scrolloffset - if it is > # lines - exit scene 
 
   render () {
     const { handleSubmit, isInitialized } = this.props;
-    const { at, loading } = this.state
+    const { scrollOffset, loading } = this.state
     const scene = document.querySelector('a-scene');
 
     if (navigator.userAgent.match('Mobi')) {
@@ -127,11 +138,8 @@ export default class VRViewer extends Component {
               </a-camera>
             </a-entity>
             {
-              this.props.speechLines
-              .map((line, idx) => ({
-                line, idx, position: [0.28, at - idx, -0.26]
-              }))
-              .filter(({ position: [x, y, z] }) => y > 1 && y < 5)
+              this.speechLines
+              .filter(({ position: [x, y, z] }) => y > scrollOffset - 1 && y < scrollOffset - 5)
               .map(({ line, position, idx }) =>
                 <a-entity key={ idx } 
                 position={ position.join(' ') } 
