@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> Staged Fright </title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<script type="text/javascript" defer>
+
+		'use strict';
+			var ff = []; 
+			//get ff over a 10-second period of utterances
+			//get ff for the next 10-second period of utterances
+			//
+			var frameId,
+				freqTable,
+				gauge,
+				micStream,
+				notesArray,
+				audioContext,
+				sourceAudioNode,
+				analyserAudioNode;
+
+			const startRecording = () => {
+			    navigator.mediaDevices.getUserMedia = (navigator.mediaDevices.getUserMedia ||
+			      navigator.webkitGetUserMedia ||
+			      navigator.mozGetUserMedia ||
+			      navigator.msGetUserMedia);
+
+			    window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+			    var source;
+
+			    if (navigator.mediaDevices.getUserMedia) {
+			       navigator.mediaDevices.getUserMedia({ audio: true })
+			       .then((stream) => {
+			          window.stream = stream
+			           streamReceived(stream);
+
+			        })
+			       .catch(e => console.error('getUserMedia() failed: ' + e))
+			    }
+			  }
+
+			var streamReceived = function (stream) {
+				micStream = stream;
+
+				analyserAudioNode = audioContext.createAnalyser();
+				analyserAudioNode.fftSize = 2048;
+
+				sourceAudioNode = audioContext.createMediaStreamSource(micStream);
+				sourceAudioNode.connect(analyserAudioNode);
+
+				detectPitch();
+			};
+
+   		var findFundamentalFreq = function(buffer, sampleRate) {
+			// We use Autocorrelation to find the fundamental frequency.
+			
+			// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away. 
+			// The autocorrelation index will be the average of these products. At the same time, we normalize the values.
+			// Source: http://www.phy.mty.edu/~suits/autocorrelation.html
+
+			// the default sample rate, depending on the hardware, is 44100Hz or 48000Hz. 
+			// a 'k' range between 120 and 650 covers signals ranging from ~70Hz to ~350Hz, which is just a little broader than the average frequency range for human speech (80-260Hz, per Wikipedia). 
+			var n = 1024, bestR = 0, bestK = -1;
+			for(var k = 120; k <= 650; k++){
+				var sum = 0;
+				
+				for(var i = 0; i < n; i++){
+					sum += ((buffer[i] - 128) / 128) * ((buffer[i + k] - 128) / 128);
+				}
+				
+				var r = sum / (n + k);
+
+				if(r > bestR){
+					bestR = r;
+					bestK = k;
+				}
+
+				if(r > 0.95) {
+					// Let's assume that this is good enough and stop right here
+					break;
+				}
+			}
+			
+			if(bestR > 0.0025) {
+				// The period (in frames) of the fundamental frequency is 'bestK'. Getting the frequency from there is trivial.
+				var fundamentalFreq = sampleRate / bestK;
+				return fundamentalFreq;
+			}
+			else {
+				// We haven't found a good correlation
+				return -1;
+			}
+		};
+
+		var frameId;
+		var detectPitch = function () {
+			var buffer = new Uint8Array(analyserAudioNode.fftSize);
+
+			analyserAudioNode.getByteTimeDomainData(buffer); 
+			var fundamentalFreq = findFundamentalFreq(buffer, audioContext.sampleRate);
+
+			if (fundamentalFreq !== -1) {
+				console.log('f0 is: ', fundamentalFreq);
+			}
+
+			frameId = window.requestAnimationFrame(detectPitch);
+		};
+
+		var turnOffMicrophone = function () {
+			if (sourceAudioNode && sourceAudioNode.mediaStream && sourceAudioNode.mediaStream.stop) {
+				sourceAudioNode.mediaStream.stop();
+			}
+			sourceAudioNode = null;
+			analyserAudioNode = null;
+			window.cancelAnimationFrame(frameId);
+		};
+
+	   	setTimeout(startRecording, 4000)
+
+
+	// graph in real-time on translucent a-frame canvas element 
+	// or try both and see what works - momentary notifications or on-screen graph  
+
+	//converting hertz to semitones: 
+	//semitone diff between 2: 
+	st = Math.abs((12/Math.log(2)) * Math.log(ff2 / ff1))
+	//put this in ending summary report
+		</script>
+	</head>
+	<body>
+		<div id="hello" />
+	</body>
+</html>
