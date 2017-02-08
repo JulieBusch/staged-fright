@@ -67,7 +67,7 @@ export default class VRViewer extends Component {
         {this.state.clap && <audio src='/bravo.mp3' autoPlay></audio>}
           <a-scene auto-enter-vr="false">
             <a-assets>
-              <audio src="/CrowdNoise2.mp3" autoPlay loop></audio>
+              <audio src="/CrowdNoise4.mp3" type="audio/mpeg" autoPlay loop></audio>
               <video muted id="mvp" autoPlay loop src="/DT_RNC.mp4" />
             </a-assets>
             <a-videosphere src="#mvp"></a-videosphere>
