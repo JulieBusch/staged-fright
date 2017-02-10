@@ -1,12 +1,41 @@
 import React, { Component } from 'react';
-import { stdSemitones, freqToMIDI, findFundamentalFreq, SoundMeter } from './utils';
+import { 
+    stdSemitones, 
+    freqToMIDI, 
+    findFundamentalFreq, 
+    SoundMeter, 
+    getRecognizeOptions, 
+    streamToWatson, 
+    getKeywordsArr, 
+    stopTranscription, 
+    resetWatson, 
+    handleStream, 
+    handleTranscriptEnd, 
+    handleRawdMessage, 
+    handleFormattedMessage, 
+    watsonTokenSetup, 
+    fetchToken, 
+    handleKeywordsChange, 
+    getFinalResults, 
+    getCurrentInterimResult, 
+    getFinalAndLatestInterimResult 
+} from './utils';
+import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone';
 
 class AudioSession extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            recording: false
+            recording: false,
+
+            //Watson things
+            model: 'en-US_BroadbandModel',
+            rawMessages: [],
+            formattedMessages: [],
+            audioSource: null,
+            speakerLabels: false,
+            keywords: '',
         }
 
         this.meterInterval = null;
@@ -18,6 +47,23 @@ class AudioSession extends Component {
         //an array of pitch measures, in MIDI values. Stores up to ten seconds' worth of data at once.
         this.pitchDataPoints = [ 40 ];
 
+        // so stream can be passed in correctly
+        this.getRecognizeOptions = this.getRecognizeOptions.bind(this);
+
+        this.streamToWatson = this.streamToWatson.bind(this);
+        this.getKeywordsArr = this.getKeywordsArr.bind(this);
+        this.stopTranscription = this.stopTranscription.bind(this);
+        this.resetWatson = this.resetWatson.bind(this);
+        this.handleStream = this.handleStream.bind(this);
+        this.handleTranscriptEnd = this.handleTranscriptEnd.bind(this);
+        this.handleRawdMessage = this.handleRawdMessage.bind(this);
+        this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
+        this.watsonTokenSetup = this.watsonTokenSetup.bind(this);
+        this.fetchToken = this.fetchToken.bind(this);
+        this.handleKeywordsChange = this.handleKeywordsChange.bind(this);
+        this.getFinalResults = this.getFinalResults.bind(this);
+        this.getCurrentInterimResult = this.getCurrentInterimResult.bind(this);
+        this.getFinalAndLatestInterimResult = this.getFinalAndLatestInterimResult.bind(this);
     }
 
     startRecording = () => {
@@ -39,9 +85,9 @@ class AudioSession extends Component {
            .then(() => {
                 this.processVolume(this.audioCtx, this.stream)
            })
+           .then(() => this.streamToWatson())
            .catch(e => console.error('getUserMedia() failed: ' + e))
         }
-
         this.setState({ recording: true });
     }
 
@@ -96,6 +142,7 @@ class AudioSession extends Component {
         clearInterval(this.meterInterval);
         clearInterval(this.pitchInterval);
         this.setState({ recording: false });
+        clearInterval(this.state.tokenInterval);
     }
 
     componentWillReceiveProps(nextProps) {
