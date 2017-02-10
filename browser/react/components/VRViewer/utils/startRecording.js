@@ -1,4 +1,6 @@
 import { SoundMeter } from './loudness';
+import { addVolumeMetricData } from '../../../../redux/action-creators'
+import store from '../../../../redux/store'
 
 export default function startRecording() {
     navigator.mediaDevices.getUserMedia = (navigator.mediaDevices.getUserMedia ||
@@ -23,6 +25,7 @@ export default function startRecording() {
             }
             this.meterInterval = setInterval(() => {
               this.props.syncData(soundMeter.slow.toFixed(2), this.pitch)
+              store.dispatch(addVolumeMetricData(soundMeter.slow.toFixed(2)))
             }, 200);
           });
         })

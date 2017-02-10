@@ -15,7 +15,7 @@ export default class VRViewer extends Component {
       scrollOffset: 0,
       time: window.performance.now(),
       loading: true,
-      clap: false,
+      clap: false
     }
 
     this.meterInterval = null;

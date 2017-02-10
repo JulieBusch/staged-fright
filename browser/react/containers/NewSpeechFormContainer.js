@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
     let speech = [], i=0, aLine = '';
     //split the speech into lines NO LONGER than 40 characters
     while (i<arr.length) {
-      if ((aLine.length + arr[i].length)>40) {
+      if ((aLine.length + arr[i].length)>36) {
         speech.push(aLine);
         aLine = '';
       } else aLine += ((arr[i++])+' ');

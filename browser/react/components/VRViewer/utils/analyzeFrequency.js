@@ -1,10 +1,10 @@
 import { findFundamentalFreq } from './findF0';
 import math from 'mathjs';
 
-//The difference between two MIDI values is the semitone interval between the two notes. 
+//The difference between two MIDI values is the semitone interval between the two notes.
 export const stdSemitones = (arrOfMIDI) => {
 	return math.std(arrOfMIDI);
-}; 
+};
 
 export default function streamReceived() {
 	const micStream = this.stream;
@@ -18,11 +18,11 @@ export default function streamReceived() {
 	const detectPitch = () => {
 
 		var buffer = new Uint8Array(analyserAudioNode.fftSize);
-		this.pitchDataPoints = this.pitchDataPoints.length > 249 ? this.pitchDataPoints.slice(1, 250) : this.pitchDataPoints.slice(); 
+		this.pitchDataPoints = this.pitchDataPoints.length > 249 ? this.pitchDataPoints.slice(1, 250) : this.pitchDataPoints.slice();
 		//hacky workaround for extensibility error
 
-		var bufferLength = analyserAudioNode.fftSize; 
-		analyserAudioNode.getByteTimeDomainData(buffer); 
+		var bufferLength = analyserAudioNode.fftSize;
+		analyserAudioNode.getByteTimeDomainData(buffer);
 		var fundamentalFreq = findFundamentalFreq(buffer, this.audioCtx.sampleRate);
 		if (fundamentalFreq !== -1) {
 			this.pitchDataPoints.push(freqToMIDI(fundamentalFreq));

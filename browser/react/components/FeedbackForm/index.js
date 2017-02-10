@@ -26,6 +26,13 @@ export default class FeedbackForm extends Component {
     };
   }
 
+  componentDidMount() {
+    // For testing visualization data
+    console.log('This is the length of volumeMeterArr: ', this.state.volumeMeterArr);
+    // console.log('This is the length of pitchArr: ', this.state.pitchArr);
+    // console.log('This is the length of stdSemitonesArr: ', this.state.stdSemitonesArr);
+  }
+
   handleChange = field => event => {
     const value = event.target.value;
 

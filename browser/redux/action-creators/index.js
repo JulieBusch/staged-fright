@@ -1,5 +1,6 @@
 import { push, replace } from 'react-router-redux';
 import firedux, { firebaseApp } from '../store/firedux';
+import { SET_VOLUME_DATA, SET_PITCH_DATA, SET_SEMITONE_DATA } from '../constants';
 const sessionKey = firedux.ref.key;
 
 export const submitSpeechData = fields => dispatch => {
@@ -31,3 +32,42 @@ export const updateData = (loudness, monotonyBool) => dispatch => {
 		loudness,
 	});
 };
+
+export const addVolumeMetricData = volumeDataArr => dispatch => {
+	firedux.update('speechData', {
+		volumeDataArr
+	})
+}
+
+export const addPitchMetricData = pitchDataArr => dispatch => {
+	firedux.update('speechData', {
+		pitchDataArr
+	})
+}
+
+export const addSemitoneMetricData = semitoneDataArr => dispatch => {
+	firedux.update('speechData', {
+		semitoneDataArr
+	})
+}
+
+// export const addVolumeMetricData = volumeDataArr => {
+// 	return {
+// 		type: SET_VOLUME_DATA,
+// 		volumeDataArr
+// 	}
+// }
+
+// export const addPitchMetricData = pitchDataArr => {
+// 	return {
+// 		type: SET_PITCH_DATA,
+// 		pitchDataArr
+// 	}
+// }
+
+// export const addSemitoneMetricData = semitoneDataArr => {
+// 	return {
+// 		type: SET_SEMITONE_DATA,
+// 		semitoneDataArr
+// 	}
+// }

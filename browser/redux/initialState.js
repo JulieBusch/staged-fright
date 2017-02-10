@@ -8,6 +8,9 @@ const initialState = Map({
   locationBeforeTransitions: null,
   loudness: 0,
   pitch: false,
+  volumeMeterArr: [],
+  pitchArr: [],
+  stdSemitonesArr: []
 });
 
 export default initialState;

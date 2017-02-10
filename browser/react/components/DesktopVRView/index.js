@@ -14,12 +14,12 @@ class DesktopVRView extends Component {
         super(props);
 
         this.startRecording = startRecordingUtil.bind(this);
-        this.meterInterval = null
+        this.meterInterval = null;
         this.pitchInterval = null;
 
         this.pitchRafId = null;
         this.pitch = this.props.pitch || false;
-        //an array of pitch measures, in MIDI values. Stores up to ten seconds' worth of data at once. 
+        //an array of pitch measures, in MIDI values. Stores up to ten seconds' worth of data at once.
         this.pitchDataPoints = [ 40 ];
 
         this.processPitch = pitchProcessingUtil.bind(this);
