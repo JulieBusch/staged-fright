@@ -3,9 +3,21 @@ import firedux, { firebaseApp } from '../store/firedux';
 import { SET_VOLUME_DATA, SET_PITCH_DATA, SET_SEMITONE_DATA } from '../constants';
 const sessionKey = firedux.ref.key;
 
+const goToSummary = dispatch => {
+	dispatch(push(`/${sessionKey}/feedback`));
+};
+
+const goToChooseView = dispatch => {
+	dispatch(push(`/${sessionKey}/choose-view`));
+};
+
+const goToNewSpeech = dispatch => {
+	dispatch(push(`/${sessionKey}/new-speech`));
+};
+
 export const submitSpeechData = fields => dispatch => {
   firedux.set('speechData', fields)
-  .then(dispatch(push(`/${sessionKey}/choose-view`)));
+  .then(dispatch(goToChooseView));
 };
 
 export const populatePremadeSpeech = id => dispatch => {
@@ -13,7 +25,7 @@ export const populatePremadeSpeech = id => dispatch => {
 	.once('value', (value) => {
 		const { speechLines, wpm } = value.val().speechData;
 		firedux.set('speechData', { speechLines, wpm })
-		.then(dispatch(push(`/${sessionKey}/new-speech`)));
+		.then(dispatch(goToNewSpeech));
 	});
 };
 
@@ -21,53 +33,43 @@ export const sendFeedback = fields => dispatch => {
   firedux.push('speechData/feedback', fields);
 };
 
-export const finishRecording = dispatch => {
-	//redirects instead of a push as a way to get over component mounting scroll problems
-	window.location.pathname = `/${sessionKey}/feedback`;
-};
-
 export const updateData = (loudness, monotonyBool) => dispatch => {
 	firedux.update('speechData', {
 		pitch: monotonyBool,
-		loudness,
+		loudness
 	});
 };
 
+export const startRecording = dispatch => {
+	firedux.update('speechData', {
+		recording: true,
+	});
+};
+
+export const stopRecording = dispatch => {
+	firedux.update('speechData', {
+		recording: false,
+	})
+	.then(dispatch(goToSummary));
+};
+
 export const addVolumeMetricData = volumeDataArr => dispatch => {
+	console.log('we made it inside addVolumeMetricData!');
 	firedux.update('speechData', {
 		volumeDataArr
 	})
-}
+};
 
 export const addPitchMetricData = pitchDataArr => dispatch => {
+	console.log('we made it inside addPitchMetricData!');
 	firedux.update('speechData', {
 		pitchDataArr
 	})
-}
+};
 
 export const addSemitoneMetricData = semitoneDataArr => dispatch => {
+	console.log('we made it inside addSemitoneMetricData!');
 	firedux.update('speechData', {
 		semitoneDataArr
 	})
-}
-
-// export const addVolumeMetricData = volumeDataArr => {
-// 	return {
-// 		type: SET_VOLUME_DATA,
-// 		volumeDataArr
-// 	}
-// }
-
-// export const addPitchMetricData = pitchDataArr => {
-// 	return {
-// 		type: SET_PITCH_DATA,
-// 		pitchDataArr
-// 	}
-// }
-
-// export const addSemitoneMetricData = semitoneDataArr => {
-// 	return {
-// 		type: SET_SEMITONE_DATA,
-// 		semitoneDataArr
-// 	}
-// }
+};

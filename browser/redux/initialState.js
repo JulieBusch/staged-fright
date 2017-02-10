@@ -10,7 +10,8 @@ const initialState = Map({
   pitch: false,
   volumeMeterArr: [],
   pitchArr: [],
-  stdSemitonesArr: []
+  stdSemitonesArr: [],
+  recording: false
 });
 
 export default initialState;
