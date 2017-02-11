@@ -20,6 +20,12 @@ module.exports = {
     noParse: [
       /node_modules\/aframe\/dist\/aframe-master.js/
     ],
+    preLoaders: [
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      }
+    ],
     loaders: [
       {
         test: /jsx?$/,

@@ -13,11 +13,13 @@ configServer(app);
 const stt = new SpeechToTextV1({
   // if left undefined, username and password to fall back to the SPEECH_TO_TEXT_USERNAME and
   // SPEECH_TO_TEXT_PASSWORD environment properties, and then to VCAP_SERVICES (on Bluemix)
-  username: '',
-  password: ''
+  username: '4cef66fc-eeb0-4de6-ab9d-35b66d110359',
+  password: 'vQU1yVuxhSik'
 });
 
 const authService = new AuthorizationV1(stt.getCredentials());
+
+app.enable('trust proxy');
 
 // Get token using your credentials
 app.get('/api/token', function(req, res, next) {
@@ -25,7 +27,7 @@ app.get('/api/token', function(req, res, next) {
     if (err) {
       next(err);
     } else {
-      res.send(token);
+      res.json(token);
     }
   });
 });
