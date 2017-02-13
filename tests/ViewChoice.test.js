@@ -5,15 +5,33 @@ import ViewChoice from '../browser/react/components/ViewChoice';
 
 describe ('Component: ViewChoice', () => {
 
-	// it ('renders without issues', () => {
-	// 	expect(
-	// 		shallow(
-	// 			<ViewChoice />
-	// 		).length
-	// 	).toEqual(1);
-	// });
+	const minProps = {
+		params: {
+			sessionKey: 'FakeSessionName'
+		}
+	};
 
-	it ('displays description when the HINT button is clicked');
-	it ('opens the FeedbackForm when DONE WITH VR button is clicked');
-	it ('loads the practice page when CONTINUE button is clicked');
+	let choicePage;
+
+	beforeEach('Create the component', () => {
+		choicePage = shallow(<ViewChoice {...minProps} />);
+	});
+
+
+	it ('renders without issues', () => {
+		expect(
+			choicePage.is('div')).to.be.equal(true);
+	});
+
+	it ('displays description when the HINT button is clicked', () => {
+
+	});
+
+	it ('opens the FeedbackForm when DONE WITH VR button is clicked', () => {
+
+	});
+	
+	it ('loads the practice page when CONTINUE button is clicked', () => {
+
+	});
 });
