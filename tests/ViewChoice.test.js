@@ -11,15 +11,27 @@ describe ('Component: ViewChoice', () => {
 		}
 	};
 
-	it ('renders without issues', () => {
+	let choicePage;
 
-		expect(
-			shallow(
-				<ViewChoice {...minProps} />
-			).is('div')).to.be.equal(true);
+	beforeEach('Create the component', () => {
+		choicePage = shallow(<ViewChoice {...minProps} />);
 	});
 
-	it ('displays description when the HINT button is clicked');
-	it ('opens the FeedbackForm when DONE WITH VR button is clicked');
-	it ('loads the practice page when CONTINUE button is clicked');
+
+	it ('renders without issues', () => {
+		expect(
+			choicePage.is('div')).to.be.equal(true);
+	});
+
+	it ('displays description when the HINT button is clicked', () => {
+
+	});
+
+	it ('opens the FeedbackForm when DONE WITH VR button is clicked', () => {
+
+	});
+	
+	it ('loads the practice page when CONTINUE button is clicked', () => {
+
+	});
 });
