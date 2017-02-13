@@ -20,17 +20,17 @@ module.exports = {
     noParse: [
       /node_modules\/aframe\/dist\/aframe-master.js/
     ],
-    preLoaders: [
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      }
-    ],
+    // preLoaders: [
+    //   {
+    //     test: /\.json$/,
+    //     loader: 'json-loader'
+    //   }
+    // ],
     loaders: [
       {
         test: /jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015', 'stage-2'],
           plugins: ['transform-object-rest-spread']
