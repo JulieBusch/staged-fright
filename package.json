@@ -2,11 +2,11 @@
   "name": "staged-fright",
   "version": "0.0.1",
   "description": "A VR application to practice public speaking",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "webpack -w & nodemon --watch server -e js,html ",
     "build": "webpack --config webpack.dist.config.js",
-    "test": "mocha --require tests/setup.js --compilers js:babel-register tests/*.test.js"
+    "test": "mocha --watch --require tests/setup.js --compilers js:babel-register tests/*.test.js"
   },
   "repository": {
     "type": "git",
