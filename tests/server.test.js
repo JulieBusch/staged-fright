@@ -1,7 +1,7 @@
-const request = require('supertest-as-promised')
+const request = require('supertest')
 const {expect} = require('chai')
 
-const app = require('../app')
+const app = require('../src/app')
 
 
 describe('server', () => {

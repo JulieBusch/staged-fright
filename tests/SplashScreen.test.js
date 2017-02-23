@@ -9,7 +9,7 @@ import SplashScreen, {
   OverlayText1, 
   OverlayText2, 
   toggleShowMe
-} from '../browser/react/components/SplashScreen';
+} from '../src/browser/react/components/SplashScreen';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // necessary so child material-ui components can be rendered properly; 
