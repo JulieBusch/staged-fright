@@ -1,9 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import HelpHint from '../browser/react/components/HelpHint';
-import HelpNote from '../browser/react/components/HelpNote';
-import HowTo from '../browser/react/components/HowTo';
+import HelpHint from '../src/browser/react/components/HelpHint';
+import HelpNote from '../src/browser/react/components/HelpNote';
+import HowTo from '../src/browser/react/components/HowTo';
 
 describe ('Simple Components:', () => {
 
